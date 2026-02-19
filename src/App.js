@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 
 const KG_TO_KCAL = 7700;
 
@@ -254,7 +254,16 @@ export default function App() {
         leanKg = w - fatKg;
       }
     }
-    setResult({ bmr: Math.round(bmr), tdee: Math.round(tdee), bmi: bmi.toFixed(1), kcalPerKm: Math.round(kcalPerKm), kmFor1kg: Math.round(kmFor1kg), kmPerDay1: +(kmFor1kg).toFixed(1), kmPerDay7: +(kmFor1kg / 7).toFixed(1), kmPerDay14: +(kmFor1kg / 14).toFixed(1), kcalPerKmWalk: Math.round(kcalPerKmWalk), kmFor1kgWalk: Math.round(kmFor1kgWalk), kmPerDay1Walk: +(kmFor1kgWalk).toFixed(1), kmPerDay7Walk: +(kmFor1kgWalk / 7).toFixed(1), kmPerDay14Walk: +(kmFor1kgWalk / 14).toFixed(1), bf, fatKg, leanKg, sex: form.sex, weight: w });
+    setResult({
+      bmr: Math.round(bmr), tdee: Math.round(tdee), bmi: bmi.toFixed(1),
+      kcalPerKm: Math.round(kcalPerKm), kmFor1kg: Math.round(kmFor1kg),
+      kmPerDay1: +(kmFor1kg).toFixed(1), kmPerDay7: +(kmFor1kg / 7).toFixed(1),
+      kmPerDay14: +(kmFor1kg / 14).toFixed(1), kmPerDay28: +(kmFor1kg / 28).toFixed(1),
+      kcalPerKmWalk: Math.round(kcalPerKmWalk), kmFor1kgWalk: Math.round(kmFor1kgWalk),
+      kmPerDay1Walk: +(kmFor1kgWalk).toFixed(1), kmPerDay7Walk: +(kmFor1kgWalk / 7).toFixed(1),
+      kmPerDay14Walk: +(kmFor1kgWalk / 14).toFixed(1), kmPerDay28Walk: +(kmFor1kgWalk / 28).toFixed(1),
+      bf, fatKg, leanKg, sex: form.sex, weight: w
+    });
     setTab("calorie");
   };
 
@@ -471,6 +480,7 @@ export default function App() {
                 { periodo: "In 1 giorno", km: result.kmPerDay1, emoji: "🔥", color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
                 { periodo: "In 1 settimana", km: result.kmPerDay7, emoji: "💪", color: "#D97706", note: "Impegnativo ma fattibile" },
                 { periodo: "In 2 settimane", km: result.kmPerDay14, emoji: "🏃", color: "#059669", note: "Ritmo sostenibile e consigliato" },
+                { periodo: "In 4 settimane", km: result.kmPerDay28, emoji: "🎯", color: "#6366F1", note: "Ritmo ideale per principianti" },
               ]} />
             </div>
           )}
@@ -480,12 +490,30 @@ export default function App() {
               <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>Formula Camminata</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.5 x peso → <strong>{result.kcalPerKmWalk} kcal/km</strong> per te</p>
               <BigBox color="#059669" km={result.kmFor1kgWalk} mode="walk" />
+              <div style={{ background: "#F0FDF4", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#166534", marginBottom: 12 }}>
+                👣 <strong>Lunghezza media di un passo:</strong> ~75 cm (0.75 m) — varia tra 70 e 80 cm in base all'altezza e all'andatura. 1 km = ~1.333 passi.
+              </div>
               <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>📅 Come distribuire i km</h4>
-              <ActivityRows items={[
-                { periodo: "In 1 giorno", km: result.kmPerDay1Walk, emoji: "🔥", color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
-                { periodo: "In 1 settimana", km: result.kmPerDay7Walk, emoji: "💪", color: "#D97706", note: "Impegnativo ma fattibile" },
-                { periodo: "In 2 settimane", km: result.kmPerDay14Walk, emoji: "🚶", color: "#059669", note: "Ritmo sostenibile e consigliato" },
-              ]} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
+                {[
+                  { periodo: "In 1 giorno", km: result.kmPerDay1Walk, emoji: "🔥", color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
+                  { periodo: "In 1 settimana", km: result.kmPerDay7Walk, emoji: "💪", color: "#D97706", note: "Impegnativo ma fattibile" },
+                  { periodo: "In 2 settimane", km: result.kmPerDay14Walk, emoji: "🚶", color: "#059669", note: "Ritmo sostenibile e consigliato" },
+                  { periodo: "In 4 settimane", km: result.kmPerDay28Walk, emoji: "🎯", color: "#6366F1", note: "Ritmo ideale per principianti" },
+                ].map((r, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F9FAFB", borderRadius: 10, padding: "12px 14px", borderLeft: "4px solid " + r.color }}>
+                    <div>
+                      <div style={{ fontWeight: 700, color: r.color, fontSize: 14 }}>{r.emoji} {r.periodo}</div>
+                      <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{r.note}</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>{r.km} km</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: "#059669" }}>~{Math.round(r.km * 1333).toLocaleString("it-IT")} passi</div>
+                      <div style={{ fontSize: 11, color: "#9CA3AF" }}>al giorno</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>⚖️ Corsa vs Camminata</h4>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 {[
