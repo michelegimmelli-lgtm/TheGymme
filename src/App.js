@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TIPS from "./tips";
 
 const KG_TO_KCAL = 7700;
 
@@ -16,7 +17,6 @@ const deficits = [
   { label: "Aggressivo", kcal: 750, rate: "~0.75 kg/sett.", color: "#DC2626" },
 ];
 
-// activities.js — parametrico, facilmente aggiornabile
 const ACTIVITIES = [
   { id: 1, nome: "Jump Rope", emoji: "🪢", met: 12.3, categoria: "cardio", note: "Ritmo moderato" },
   { id: 2, nome: "Ciclismo", emoji: "🚴", met: 8.0, categoria: "cardio", note: "Velocita media ~20 km/h" },
@@ -63,6 +63,30 @@ function KpiCard({ label, value, sub, color, note }) {
       <div style={{ fontSize: 20, fontWeight: 800, color }}>{value}</div>
       <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>{sub}</div>
       {note && <div style={{ fontSize: 10, color: "#F59E0B", marginTop: 4, fontWeight: 600 }}>{note}</div>}
+    </div>
+  );
+}
+
+function TipCard({ categoria }) {
+  const tips = TIPS.filter(t => t.categoria === categoria);
+  const [idx, setIdx] = useState(() => Math.floor(Math.random() * tips.length));
+  const tip = tips[idx];
+  const next = () => setIdx(i => (i + 1) % tips.length);
+  const colori = { corsa: "#4F46E5", camminata: "#059669", attivita: "#D97706" };
+  const bg = { corsa: "#EEF2FF", camminata: "#F0FDF4", attivita: "#FFF7ED" };
+  const col = colori[categoria];
+  return (
+    <div style={{ background: bg[categoria], borderRadius: 12, padding: "14px 16px", marginBottom: 14, borderLeft: "4px solid " + col }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: col, textTransform: "uppercase", letterSpacing: 1 }}>Consiglio del giorno</span>
+        <span style={{ fontSize: 11, color: "#9CA3AF" }}>{idx + 1} / {tips.length}</span>
+      </div>
+      <div style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, marginBottom: 12 }}>
+        <span style={{ fontSize: 20, marginRight: 8 }}>{tip.emoji}</span>{tip.testo}
+      </div>
+      <button onClick={next} style={{ padding: "6px 14px", background: col, color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+        Prossimo →
+      </button>
     </div>
   );
 }
@@ -217,7 +241,6 @@ function SimulatoreBlock({ result }) {
 function AttivitaBlock({ weight }) {
   const [selectedId, setSelectedId] = useState(ACTIVITIES[0].id);
   const [minuti, setMinuti] = useState(30);
-
   const act = ACTIVITIES.find(a => a.id === selectedId);
   const ore = minuti / 60;
   const kcalBruciate = act.met * weight * ore;
@@ -227,6 +250,7 @@ function AttivitaBlock({ weight }) {
 
   return (
     <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
+      <TipCard categoria="attivita" />
       <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🏋️ Altre attivita fisiche</h3>
       <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>
         Formula: <strong>MET x peso x ore</strong> — standard scientifico per il dispendio energetico
@@ -251,9 +275,7 @@ function AttivitaBlock({ weight }) {
         <div style={{ fontSize: 12, color: "#D97706", fontWeight: 700, marginBottom: 4, textTransform: "uppercase" }}>
           {act.emoji} {act.nome} — {minuti} minuti
         </div>
-        <div style={{ fontSize: 44, fontWeight: 900, color: "#DC2626", lineHeight: 1 }}>
-          {Math.round(kcalBruciate)}
-        </div>
+        <div style={{ fontSize: 44, fontWeight: 900, color: "#DC2626", lineHeight: 1 }}>{Math.round(kcalBruciate)}</div>
         <div style={{ fontSize: 14, color: "#D97706", marginTop: 4, fontWeight: 600 }}>kcal bruciate</div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
@@ -537,6 +559,7 @@ export default function App() {
 
           {tab === "running" && (
             <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
+              <TipCard categoria="corsa" />
               <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🏃 Formula RunForFatLoss</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.8 x peso → <strong>{result.kcalPerKm} kcal/km</strong> per te</p>
               <BigBox color="#4F46E5" km={result.kmFor1kg} mode="run" />
@@ -565,6 +588,7 @@ export default function App() {
 
           {tab === "walking" && (
             <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
+              <TipCard categoria="camminata" />
               <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🚶 Formula Camminata</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.5 x peso → <strong>{result.kcalPerKmWalk} kcal/km</strong> per te</p>
               <BigBox color="#059669" km={result.kmFor1kgWalk} mode="walk" />
