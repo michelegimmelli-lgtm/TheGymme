@@ -1,0 +1,37 @@
+// tips.js — file parametrico, aggiornabile direttamente da GitHub
+// Categorie disponibili: "corsa", "camminata", "attivita"
+// Per aggiungere un tip: copia una riga esistente e modifica testo ed emoji
+
+const TIPS = [
+  // --- CORSA ---
+  { id: 1, categoria: "corsa", emoji: "🗺️", testo: "Cambia itinerario ogni settimana: scoprire nuovi percorsi rende la corsa meno monotona e piu motivante." },
+  { id: 2, categoria: "corsa", emoji: "📸", testo: "Porta il telefono e scatta foto durante la corsa: trasformi l'allenamento in una piccola avventura." },
+  { id: 3, categoria: "corsa", emoji: "🎵", testo: "Crea una playlist con canzoni dal ritmo crescente: la musica giusta riduce la percezione della fatica e puo migliorare le tue performance." },
+  { id: 4, categoria: "corsa", emoji: "👟", testo: "Dopo 500-700 km le scarpe da corsa perdono ammortizzazione: tieni traccia del chilometraggio per evitare infortuni." },
+  { id: 5, categoria: "corsa", emoji: "🌅", testo: "Correre a digiuno brucia piu grassi nell'immediato, ma il corpo compensa nelle ore successive ripristinando le riserve. Cio che conta davvero e il deficit calorico totale della giornata." },
+  { id: 6, categoria: "corsa", emoji: "💧", testo: "Bevi almeno 500ml di acqua nelle 2 ore prima di correre. La disidratazione riduce le performance del 10%." },
+  { id: 7, categoria: "corsa", emoji: "📉", testo: "Alterna settimane intense a settimane piu leggere: il recupero e dove avviene il vero miglioramento." },
+  { id: 8, categoria: "corsa", emoji: "🏔️", testo: "Inserisci salite o accelerazioni brevi nel percorso: alternare aerobico puro a tratti lattacidi aumenta il consumo calorico complessivo e stimola adattamenti metabolici piu profondi." },
+
+  // --- CAMMINATA ---
+  { id: 9,  categoria: "camminata", emoji: "🛒", testo: "Prova la modalita TheGymme Spesa-Fit: vai a fare la spesa a piedi. Combini attivita fisica con una commissione quotidiana, porti i sacchetti a mano per un po' di carico extra e risparmi sul carburante. Win-win." },
+  { id: 10, categoria: "camminata", emoji: "🪜", testo: "Evita ascensore e scale mobili: ogni piano di scale aumenta il tuo NEAT, ovvero le calorie bruciate dai movimenti quotidiani non strutturati. Piccoli gesti, grande impatto nel lungo periodo." },
+  { id: 11, categoria: "camminata", emoji: "🚌", testo: "Scendi una fermata prima dal bus o dalla metro: aggiungi facilmente 1-2 km al giorno senza cambiare la routine." },
+  { id: 12, categoria: "camminata", emoji: "☎️", testo: "Cammina mentre sei al telefono: le chiamate di lavoro o con gli amici diventano sessioni di movimento." },
+  { id: 13, categoria: "camminata", emoji: "🐕", testo: "Se hai un cane, fai passeggiate piu lunghe del solito: fa bene a entrambi e rende il movimento piu piacevole." },
+  { id: 14, categoria: "camminata", emoji: "🎧", testo: "Ascolta podcast o audiolibri solo mentre cammini: crei un incentivo per uscire e muoverti ogni giorno." },
+  { id: 15, categoria: "camminata", emoji: "🅿️", testo: "Parcheggia sempre lontano dall'ingresso: quei 300-500 metri in piu si accumulano nel tempo." },
+  { id: 16, categoria: "camminata", emoji: "🍽️", testo: "Una passeggiata di 15 minuti dopo i pasti migliora la digestione e aiuta a contenere il picco glicemico post-prandiale: un'abitudine semplice con benefici metabolici reali." },
+
+  // --- ATTIVITA ---
+  { id: 17, categoria: "attivita", emoji: "⏱️", testo: "Il recupero tra le serie conta quanto l'esercizio: 60-90 secondi per ipertrofia, 2-3 minuti per la forza massimale." },
+  { id: 18, categoria: "attivita", emoji: "📓", testo: "Tieni un diario di allenamento: annotare pesi e ripetizioni ti aiuta a progredire e a rimanere motivato." },
+  { id: 19, categoria: "attivita", emoji: "🔄", testo: "Cambia programma ogni 6-8 settimane: il corpo si adatta rapidamente e la varieta previene gli stalli." },
+  { id: 20, categoria: "attivita", emoji: "🧘", testo: "Dedica 5-10 minuti allo stretching: migliora il recupero e riduce i dolori muscolari." },
+  { id: 21, categoria: "attivita", emoji: "😴", testo: "Il muscolo cresce durante il sonno, non in palestra. 7-9 ore di sonno sono fondamentali per i risultati." },
+  { id: 22, categoria: "attivita", emoji: "🥚", testo: "Assicurati di assumere il giusto quantitativo proteico giornaliero: se il tuo obiettivo e costruire massa muscolare, e necessario anche un surplus calorico. Senza questi due elementi l'allenamento da solo non basta." },
+  { id: 23, categoria: "attivita", emoji: "🤸", testo: "Il riscaldamento non e opzionale: 5-10 minuti di mobilita riducono il rischio di infortuni del 50%." },
+  { id: 24, categoria: "attivita", emoji: "🏠", testo: "Anche 20 minuti a casa con esercizi a corpo libero sono efficaci: la costanza batte sempre l'intensita occasionale." },
+];
+
+export default TIPS;
