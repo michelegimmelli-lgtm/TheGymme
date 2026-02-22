@@ -16,6 +16,15 @@ const deficits = [
   { label: "Aggressivo", kcal: 750, rate: "~0.75 kg/sett.", color: "#DC2626" },
 ];
 
+// activities.js — parametrico, facilmente aggiornabile
+const ACTIVITIES = [
+  { id: 1, nome: "Jump Rope", emoji: "🪢", met: 12.3, categoria: "cardio", note: "Ritmo moderato" },
+  { id: 2, nome: "Ciclismo", emoji: "🚴", met: 8.0, categoria: "cardio", note: "Velocita media ~20 km/h" },
+  { id: 3, nome: "Nuoto", emoji: "🏊", met: 9.8, categoria: "cardio", note: "Stile libero moderato" },
+  { id: 4, nome: "Pesi / Palestra", emoji: "🏋️", met: 5.0, categoria: "forza", note: "Allenamento con i pesi" },
+  { id: 5, nome: "HIIT", emoji: "🔥", met: 14.0, categoria: "cardio", note: "Alta intensita intervallata" },
+];
+
 function calcBMR(w, h, a, sex) {
   return sex === "M" ? 10*w + 6.25*h - 5*a + 5 : 10*w + 6.25*h - 5*a - 161;
 }
@@ -29,19 +38,19 @@ function getBFCategory(sex, bf) {
     if (bf < 14) return { label: "Atleta", color: "#059669" };
     if (bf < 18) return { label: "Fitness", color: "#10B981" };
     if (bf < 25) return { label: "Nella media", color: "#D97706" };
-    return       { label: "Obesità", color: "#DC2626" };
+    return { label: "Obesita", color: "#DC2626" };
   }
   if (bf < 14) return { label: "Grasso essenziale", color: "#3B82F6" };
   if (bf < 21) return { label: "Atleta", color: "#059669" };
   if (bf < 25) return { label: "Fitness", color: "#10B981" };
   if (bf < 32) return { label: "Nella media", color: "#D97706" };
-  return       { label: "Obesità", color: "#DC2626" };
+  return { label: "Obesita", color: "#DC2626" };
 }
 function getBMIInfo(bmi) {
   if (bmi < 18.5) return { label: "Sottopeso", color: "#3B82F6" };
   if (bmi < 25)   return { label: "Normopeso", color: "#059669" };
   if (bmi < 30)   return { label: "Sovrappeso", color: "#D97706" };
-  return           { label: "Obesità", color: "#DC2626" };
+  return { label: "Obesita", color: "#DC2626" };
 }
 
 const iStyle = { width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 15, outline: "none", boxSizing: "border-box", background: "#F9FAFB" };
@@ -58,31 +67,12 @@ function KpiCard({ label, value, sub, color, note }) {
   );
 }
 
-function ActivityRows({ items }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-      {items.map((r, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F9FAFB", borderRadius: 10, padding: "12px 14px", borderLeft: "4px solid " + r.color }}>
-          <div>
-            <div style={{ fontWeight: 700, color: r.color, fontSize: 14 }}>{r.emoji} {r.periodo}</div>
-            <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{r.note}</div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#111827" }}>{r.km} km</div>
-            <div style={{ fontSize: 11, color: "#9CA3AF" }}>al giorno</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function BigBox({ color, km, mode }) {
   return (
     <div style={{ background: mode === "run" ? "#EEF2FF" : "#F0FDF4", borderRadius: 12, padding: 16, textAlign: "center", marginBottom: 14 }}>
       <div style={{ fontSize: 13, color, fontWeight: 600, marginBottom: 4 }}>KM TOTALI PER BRUCIARE 1 KG DI</div>
       <div style={{ fontSize: 18, fontWeight: 900, color: "#DC2626", letterSpacing: 2, marginBottom: 6 }}>GRASSO</div>
-      <div style={{ fontSize: 13, color, fontWeight: 600, marginBottom: 8 }}>{mode === "run" ? "🏃‍♂️ CORRENDO" : "🚶 CAMMINANDO"}</div>
+      <div style={{ fontSize: 13, color, fontWeight: 600, marginBottom: 8 }}>{mode === "run" ? "🏃 CORRENDO" : "🚶 CAMMINANDO"}</div>
       <div style={{ fontSize: 44, fontWeight: 900, color, lineHeight: 1 }}>{km}</div>
       <div style={{ fontSize: 13, color, marginTop: 4 }}>km complessivi</div>
     </div>
@@ -92,7 +82,6 @@ function BigBox({ color, km, mode }) {
 function SimulatoreBlock({ result }) {
   const [targetBf, setTargetBf] = useState("");
   const [sim, setSim] = useState(null);
-
   const currentBf = result.bf;
   const currentWeight = result.weight;
   const leanKg = result.leanKg;
@@ -139,7 +128,7 @@ function SimulatoreBlock({ result }) {
       <label style={lStyle}>% grasso obiettivo</label>
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
         <input style={{ ...iStyle, flex: 1 }} type="number" min="4" max={currentBf - 0.1} step="0.5"
-          placeholder={`Es. ${Math.max(4, Math.round(currentBf - 5))}`}
+          placeholder={"Es. " + Math.max(4, Math.round(currentBf - 5))}
           value={targetBf} onChange={e => { setTargetBf(e.target.value); setSim(null); }} />
         <button onClick={runSim} style={{ padding: "10px 20px", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 14, whiteSpace: "nowrap" }}>Simula →</button>
       </div>
@@ -152,9 +141,9 @@ function SimulatoreBlock({ result }) {
           }}>{v}%</button>
         ))}
       </div>
-      {sim?.error && (
+      {sim && sim.error && (
         <div style={{ background: "#FEF2F2", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#DC2626" }}>
-          ⚠️ L'obiettivo deve essere inferiore alla tua percentuale attuale ({currentBf.toFixed(1)}%).
+          L'obiettivo deve essere inferiore alla percentuale attuale ({currentBf.toFixed(1)}%).
         </div>
       )}
       {sim && !sim.error && (
@@ -168,8 +157,8 @@ function SimulatoreBlock({ result }) {
                 <div style={{ fontSize: 13, color: "#059669", fontWeight: 700 }}>{(100 - currentBf).toFixed(1)}% magro</div>
               </div>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 28 }}>→</div>
-                <div style={{ fontSize: 11, color: "#DC2626", fontWeight: 700, background: "#FEF2F2", borderRadius: 6, padding: "2px 8px", marginTop: 4 }}>-{sim.fatLost} kg grasso</div>
+                <div style={{ fontSize: 24 }}>→</div>
+                <div style={{ fontSize: 11, color: "#DC2626", fontWeight: 700, background: "#FEF2F2", borderRadius: 6, padding: "2px 8px", marginTop: 4 }}>-{sim.fatLost} kg</div>
               </div>
               <div style={{ textAlign: "center", flex: 1 }}>
                 <div style={{ fontSize: 11, color: "#6B7280", fontWeight: 600, marginBottom: 4, textTransform: "uppercase" }}>Obiettivo</div>
@@ -181,7 +170,7 @@ function SimulatoreBlock({ result }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 14 }}>
             <KpiCard label="Peso obiettivo" value={sim.weightTarget + " kg"} sub="stima" color="#4F46E5" />
-            <KpiCard label="Grasso (kg)" value={sim.fatKgTarget + " kg"} sub={`${targetBf}% del corpo`} color={bfCat.color} />
+            <KpiCard label="Grasso (kg)" value={sim.fatKgTarget + " kg"} sub={targetBf + "% del corpo"} color={bfCat.color} />
             <KpiCard label="Categoria BF" value={bfCat.label} sub="per il sesso selezionato" color={bfCat.color} />
           </div>
           <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>⏱️ Tempo stimato con deficit alimentare</h4>
@@ -193,18 +182,16 @@ function SimulatoreBlock({ result }) {
               <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F9FAFB", borderRadius: 10, padding: "12px 14px", borderLeft: "4px solid " + d.color }}>
                 <div>
                   <div style={{ fontWeight: 700, color: d.color, fontSize: 14 }}>{d.label} (-{d.kcal} kcal/die)</div>
-                  <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{d.rate} → {Math.ceil(parseFloat(d.weeks))} settimane = ~{Math.round(Math.ceil(parseFloat(d.weeks)) / 4.3)} mesi</div>
+                  <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{d.rate} → {Math.ceil(parseFloat(d.weeks))} sett. = ~{Math.round(Math.ceil(parseFloat(d.weeks)) / 4.3)} mesi</div>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: "#111827" }}>{d.weeks} sett.</div>
-                </div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: "#111827" }}>{d.weeks} sett.</div>
               </div>
             ))}
           </div>
-          <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>🏃 Km totali per raggiungere l'obiettivo (solo sport)</h4>
+          <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>🏃 Km totali per raggiungere l'obiettivo</h4>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
             {[
-              { label: "🏃‍♂️ Correndo", km: sim.kmRun, color: "#4F46E5", bg: "#EEF2FF" },
+              { label: "🏃 Correndo", km: sim.kmRun, color: "#4F46E5", bg: "#EEF2FF" },
               { label: "🚶 Camminando", km: sim.kmWalk, color: "#059669", bg: "#F0FDF4" },
             ].map((c, i) => (
               <div key={i} style={{ background: c.bg, borderRadius: 12, padding: "14px 10px", textAlign: "center" }}>
@@ -215,14 +202,89 @@ function SimulatoreBlock({ result }) {
             ))}
           </div>
           <div style={{ background: "#F3F4F6", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#374151", marginBottom: 10 }}>
-            <strong>Deficit calorico totale necessario:</strong> {sim.kcalToLose.toLocaleString("it-IT")} kcal
-            <span style={{ color: "#6B7280" }}> ({sim.fatLost} kg × 7.700 kcal/kg)</span>
+            <strong>Deficit calorico totale:</strong> {sim.kcalToLose.toLocaleString("it-IT")} kcal
+            <span style={{ color: "#6B7280" }}> ({sim.fatLost} kg x 7.700 kcal/kg)</span>
           </div>
           <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#78350F" }}>
-            <strong>⚠️ Nota:</strong> La simulazione assume perdita di solo grasso con massa magra costante. Combina deficit alimentare + attività fisica per risultati ottimali.
+            Simulazione con massa magra costante. Combina deficit alimentare e attivita fisica per risultati ottimali.
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function AttivitaBlock({ weight }) {
+  const [selectedId, setSelectedId] = useState(ACTIVITIES[0].id);
+  const [minuti, setMinuti] = useState(30);
+
+  const act = ACTIVITIES.find(a => a.id === selectedId);
+  const ore = minuti / 60;
+  const kcalBruciate = act.met * weight * ore;
+  const sessioniPer1kg = KG_TO_KCAL / kcalBruciate;
+  const kcalCamminata = 0.5 * weight * ore;
+  const kcalCorsa = 0.8 * weight * ore;
+
+  return (
+    <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
+      <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🏋️ Altre attivita fisiche</h3>
+      <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>
+        Formula: <strong>MET x peso x ore</strong> — standard scientifico per il dispendio energetico
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
+        <div>
+          <label style={lStyle}>Seleziona attivita</label>
+          <select style={{ ...iStyle, cursor: "pointer" }} value={selectedId} onChange={e => setSelectedId(parseInt(e.target.value))}>
+            {ACTIVITIES.map(a => (
+              <option key={a.id} value={a.id}>{a.emoji} {a.nome}</option>
+            ))}
+          </select>
+          <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 4 }}>MET: {act.met} — {act.note}</div>
+        </div>
+        <div>
+          <label style={lStyle}>Durata (minuti)</label>
+          <input style={iStyle} type="number" min="5" max="300" step="5"
+            value={minuti} onChange={e => setMinuti(Math.max(1, parseInt(e.target.value) || 30))} />
+        </div>
+      </div>
+      <div style={{ background: "linear-gradient(135deg, #FFF7ED, #FEF2F2)", borderRadius: 12, padding: 16, textAlign: "center", marginBottom: 14 }}>
+        <div style={{ fontSize: 12, color: "#D97706", fontWeight: 700, marginBottom: 4, textTransform: "uppercase" }}>
+          {act.emoji} {act.nome} — {minuti} minuti
+        </div>
+        <div style={{ fontSize: 44, fontWeight: 900, color: "#DC2626", lineHeight: 1 }}>
+          {Math.round(kcalBruciate)}
+        </div>
+        <div style={{ fontSize: 14, color: "#D97706", marginTop: 4, fontWeight: 600 }}>kcal bruciate</div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
+        <KpiCard label="Sessioni per 1 kg" value={sessioniPer1kg.toFixed(1)} sub={"sessioni da " + minuti + " min"} color="#DC2626" />
+        <KpiCard label="Giorni consecutivi" value={Math.ceil(sessioniPer1kg).toFixed(0)} sub="per bruciare 1 kg" color="#D97706" />
+      </div>
+      <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>⚖️ Confronto con {minuti} minuti di attivita</h4>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {[
+          { label: act.emoji + " " + act.nome, kcal: Math.round(kcalBruciate), color: "#DC2626", highlight: true },
+          { label: "🏃 Corsa", kcal: Math.round(kcalCorsa), color: "#4F46E5", highlight: false },
+          { label: "🚶 Camminata", kcal: Math.round(kcalCamminata), color: "#059669", highlight: false },
+        ].map((c, i) => {
+          const maxKcal = Math.max(kcalBruciate, kcalCorsa, kcalCamminata);
+          const pct = (c.kcal / maxKcal) * 100;
+          return (
+            <div key={i} style={{ background: c.highlight ? "#FEF2F2" : "#F9FAFB", borderRadius: 10, padding: "10px 14px", borderLeft: "4px solid " + c.color }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                <span style={{ fontWeight: 700, color: c.color, fontSize: 14 }}>{c.label}</span>
+                <span style={{ fontWeight: 800, color: "#111827", fontSize: 16 }}>{c.kcal} kcal</span>
+              </div>
+              <div style={{ background: "#E5E7EB", borderRadius: 4, height: 6 }}>
+                <div style={{ width: pct + "%", background: c.color, borderRadius: 4, height: 6 }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#78350F", marginTop: 14 }}>
+        I valori MET sono basati sul Compendium of Physical Activities. Il dispendio reale varia in base a intensita, forma fisica e metabolismo individuale.
+      </div>
     </div>
   );
 }
@@ -248,31 +310,67 @@ export default function App() {
     const hasHips = form.sex === "F" ? !!hips : true;
     if (waist && neck && hasHips && waist > neck) {
       const raw = calcBodyFat(form.sex, h, waist, neck, form.sex === "F" ? hips : 0);
-      if (raw > 0 && raw < 70) {
-        bf = raw;
-        fatKg = (raw / 100) * w;
-        leanKg = w - fatKg;
-      }
+      if (raw > 0 && raw < 70) { bf = raw; fatKg = (raw / 100) * w; leanKg = w - fatKg; }
     }
     setResult({
       bmr: Math.round(bmr), tdee: Math.round(tdee), bmi: bmi.toFixed(1),
       kcalPerKm: Math.round(kcalPerKm), kmFor1kg: Math.round(kmFor1kg),
-      kmPerDay1: +(kmFor1kg).toFixed(1), kmPerDay7: +(kmFor1kg / 7).toFixed(1),
-      kmPerDay14: +(kmFor1kg / 14).toFixed(1), kmPerDay28: +(kmFor1kg / 28).toFixed(1),
+      kmPerDay1: +(kmFor1kg).toFixed(1), kmPerDay7: +(kmFor1kg/7).toFixed(1),
+      kmPerDay14: +(kmFor1kg/14).toFixed(1), kmPerDay28: +(kmFor1kg/28).toFixed(1),
       kcalPerKmWalk: Math.round(kcalPerKmWalk), kmFor1kgWalk: Math.round(kmFor1kgWalk),
-      kmPerDay1Walk: +(kmFor1kgWalk).toFixed(1), kmPerDay7Walk: +(kmFor1kgWalk / 7).toFixed(1),
-      kmPerDay14Walk: +(kmFor1kgWalk / 14).toFixed(1), kmPerDay28Walk: +(kmFor1kgWalk / 28).toFixed(1),
+      kmPerDay1Walk: +(kmFor1kgWalk).toFixed(1), kmPerDay7Walk: +(kmFor1kgWalk/7).toFixed(1),
+      kmPerDay14Walk: +(kmFor1kgWalk/14).toFixed(1), kmPerDay28Walk: +(kmFor1kgWalk/28).toFixed(1),
       bf, fatKg, leanKg, sex: form.sex, weight: w
     });
     setTab("calorie");
   };
 
-  const tabs = [["calorie","🥗 Deficit"],["running","🔥 Brucia 1kg 🏃‍♂️"],["walking","🚶 Brucia 1kg"]];
+  const tabs = [
+    ["calorie", "🥗 Deficit"],
+    ["running", "🏃 Brucia 1kg"],
+    ["walking", "🚶 Brucia 1kg"],
+    ["attivita", "🏋️ Altre Attivita"],
+  ];
+
+  const guideData = [
+    { bg: "#EEF2FF", col: "#4F46E5", title: "1. Come inserire i dati", items: [
+      ["Peso (kg)", "Inserisci il tuo peso corporeo attuale, es. 95.5. Usa il punto come separatore decimale."],
+      ["Altezza (cm)", "Inserisci la tua altezza in centimetri, es. 178."],
+      ["Eta", "Inserisci la tua eta in anni interi."],
+      ["Sesso biologico", "Seleziona Uomo o Donna. Influisce sulla formula del BMR e sui range di massa grassa."],
+      ["Livello di attivita", "Scegli il livello che descrive meglio la tua settimana tipo."],
+    ]},
+    { bg: "#FEF2F2", col: "#DC2626", title: "2. Come misurare vita, collo e fianchi", intro: "Usa un metro da sarto sulla pelle, non sopra i vestiti. Misura al mattino a digiuno e ripeti 2-3 volte usando la media.", items: [
+      ["Vita (uomo)", "All'altezza dell'ombelico, in posizione rilassata."],
+      ["Vita (donna)", "Nel punto piu stretto del busto, sopra l'ombelico."],
+      ["Collo", "Appena sotto il pomo d'Adamo, metro orizzontale."],
+      ["Fianchi (solo donne)", "Nel punto piu largo dei fianchi/glutei."],
+    ]},
+    { bg: "#F0FDF4", col: "#059669", title: "3. Come leggere i risultati", items: [
+      ["BMR", "Calorie bruciate a riposo assoluto. E la base di partenza."],
+      ["TDEE", "Fabbisogno calorico reale giornaliero. Mangiare meno crea un deficit."],
+      ["BMI", "Indice matematico orientativo: non distingue muscolo da grasso."],
+      ["% Massa grassa", "Calcolata con metodo US Navy. Margine di errore +/-3-4%."],
+      ["Massa magra", "Muscoli, ossa, organi, acqua. E la costante usata nel simulatore."],
+      ["Deficit calorico", "Quante kcal in meno rispetto al TDEE per perdere peso."],
+    ]},
+    { bg: "#EEF2FF", col: "#4F46E5", title: "4. Come usare il Simulatore Dimagrimento", intro: "Visibile solo dopo aver calcolato la composizione corporea (servono vita e collo).", items: [
+      ["Inserisci il % grasso obiettivo", "Digita la percentuale target o usa i tasti rapidi."],
+      ["Premi Simula", "Calcola il peso di arrivo mantenendo costante la massa magra."],
+      ["Leggi i risultati", "Peso obiettivo, kg da perdere, settimane stimate, km di corsa/camminata."],
+      ["Formula usata", "Peso obiettivo = Massa magra / (1 - % grasso target / 100)."],
+    ]},
+    { bg: "#FFF7ED", col: "#D97706", title: "5. Come usare Altre Attivita", intro: "Disponibile dopo aver calcolato i risultati. Calcola il dispendio calorico per attivita diverse dalla camminata e corsa.", items: [
+      ["Seleziona attivita", "Scegli dal menu a tendina l'attivita che vuoi calcolare."],
+      ["Inserisci la durata", "Indica i minuti di allenamento previsti."],
+      ["MET", "Valore scientifico che misura l'intensita di un'attivita rispetto al riposo. Piu alto = piu kcal bruciate."],
+      ["Sessioni per 1 kg", "Quante volte devi fare quella attivita per bruciare 1 kg di grasso."],
+    ]},
+  ];
 
   return (
     <div style={{ fontFamily: "sans-serif", maxWidth: 560, margin: "0 auto", padding: 20 }}>
 
-      {/* Guida utilizzo */}
       {showGuide && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, overflowY: "auto" }}>
           <div style={{ background: "#fff", borderRadius: 16, padding: 24, maxWidth: 480, width: "100%", boxShadow: "0 8px 40px rgba(0,0,0,0.2)", maxHeight: "90vh", overflowY: "auto" }}>
@@ -280,41 +378,13 @@ export default function App() {
               <h2 style={{ margin: 0, fontSize: 18, color: "#111827" }}>📖 Guida all'utilizzo</h2>
               <button onClick={() => setShowGuide(false)} style={{ background: "#F3F4F6", border: "none", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontWeight: 700, fontSize: 16, color: "#374151" }}>✕</button>
             </div>
-            {[
-              { bg: "#EEF2FF", col: "#4F46E5", title: "📋 1. Come inserire i dati", items: [
-                ["Peso (kg)", "Inserisci il tuo peso corporeo attuale, es. 95.5. Usa il punto come separatore decimale."],
-                ["Altezza (cm)", "Inserisci la tua altezza in centimetri, es. 178."],
-                ["Età", "Inserisci la tua età in anni interi."],
-                ["Sesso biologico", "Seleziona Uomo o Donna. Influisce sulla formula del BMR e sui range di massa grassa."],
-                ["Livello di attività", "Scegli il livello che descrive meglio la tua settimana tipo."],
-              ]},
-              { bg: "#FEF2F2", col: "#DC2626", title: "📏 2. Come misurare vita, collo e fianchi", intro: "Usa un metro da sarto sulla pelle, non sopra i vestiti. Misura al mattino a digiuno e ripeti 2-3 volte usando la media.", items: [
-                ["Vita (uomo)", "All'altezza dell'ombelico, in posizione rilassata."],
-                ["Vita (donna)", "Nel punto più stretto del busto, sopra l'ombelico."],
-                ["Collo", "Appena sotto il pomo d'Adamo, metro orizzontale."],
-                ["Fianchi (solo donne)", "Nel punto più largo dei fianchi/glutei."],
-              ]},
-              { bg: "#F0FDF4", col: "#059669", title: "📊 3. Come leggere i risultati", items: [
-                ["BMR", "Calorie bruciate a riposo assoluto. È la base di partenza."],
-                ["TDEE", "Fabbisogno calorico reale giornaliero. Mangiare meno crea un deficit."],
-                ["BMI", "Indice matematico orientativo: non distingue muscolo da grasso."],
-                ["% Massa grassa", "Calcolata con metodo US Navy. Margine di errore ±3-4%."],
-                ["Massa magra", "Muscoli, ossa, organi, acqua. È la costante usata nel simulatore."],
-                ["Deficit calorico", "Quante kcal in meno rispetto al TDEE per perdere peso."],
-              ]},
-              { bg: "#EEF2FF", col: "#4F46E5", title: "🎯 4. Come usare il Simulatore Dimagrimento", intro: "Visibile solo dopo aver calcolato la composizione corporea (servono vita e collo).", items: [
-                ["Inserisci il % grasso obiettivo", "Digita la percentuale target o usa i tasti rapidi."],
-                ["Premi 'Simula →'", "Calcola il peso di arrivo mantenendo costante la massa magra."],
-                ["Leggi i risultati", "Peso obiettivo, kg da perdere, settimane stimate, km di corsa/camminata."],
-                ["Formula usata", "Peso obiettivo = Massa magra ÷ (1 - % grasso target / 100)."],
-              ]},
-            ].map((sec, si) => (
+            {guideData.map((sec, si) => (
               <div key={si} style={{ marginBottom: 20 }}>
                 <div style={{ background: sec.bg, borderRadius: 10, padding: "8px 14px", fontWeight: 700, color: sec.col, fontSize: 14, marginBottom: 10 }}>{sec.title}</div>
                 {sec.intro && <p style={{ fontSize: 13, color: "#374151", margin: "0 0 10px", lineHeight: 1.6 }}>{sec.intro}</p>}
                 {sec.items.map(([t, d]) => (
                   <div key={t} style={{ marginBottom: 8 }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, color: "#111827" }}>• {t}</div>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: "#111827" }}>- {t}</div>
                     <div style={{ fontSize: 13, color: "#6B7280", marginLeft: 10 }}>{d}</div>
                   </div>
                 ))}
@@ -325,14 +395,13 @@ export default function App() {
         </div>
       )}
 
-      {/* Disclaimer */}
       {showDisclaimer && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div style={{ background: "#fff", borderRadius: 16, padding: 28, maxWidth: 420, width: "100%", boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}>
             <div style={{ fontSize: 36, textAlign: "center", marginBottom: 12 }}>⚠️</div>
             <h2 style={{ margin: "0 0 12px", fontSize: 18, textAlign: "center", color: "#111827" }}>Attenzione — Valori Stimati</h2>
             <p style={{ margin: "0 0 14px", fontSize: 14, color: "#374151", lineHeight: 1.7 }}>
-              Tutti i calcoli forniti da questa app — tra cui BMR, TDEE, percentuale di massa grassa, peso obiettivo e dispendio calorico — sono <strong>stime indicative</strong> basate su formule matematiche standardizzate.
+              Tutti i calcoli forniti da questa app sono <strong>stime indicative</strong> basate su formule matematiche standardizzate.
             </p>
             <p style={{ margin: "0 0 20px", fontSize: 14, color: "#374151", lineHeight: 1.7 }}>
               I risultati possono variare in base a fattori individuali. <strong>Utilizza questi dati come spunto di riflessione</strong>, non come valori assoluti.
@@ -345,34 +414,32 @@ export default function App() {
         </div>
       )}
 
-      {/* Header */}
       <div style={{ textAlign: "center", marginBottom: 24 }}>
         <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: 1, marginBottom: 6 }}>
           <span style={{ color: "#111827" }}>The</span><span style={{ color: "#DC2626" }}>Gym</span><span style={{ color: "#111827" }}>me</span>
         </div>
-        <h2 style={{ margin: "4px 0 6px", fontSize: 22 }}>Calcolatore Calorie & Dispendio Energetico</h2>
+        <h2 style={{ margin: "4px 0 6px", fontSize: 22 }}>Calcolatore Calorie &amp; Dispendio Energetico</h2>
         <p style={{ color: "#6B7280", fontSize: 13, margin: "0 0 12px" }}>Fabbisogno calorico, deficit, massa grassa, corsa e camminata per perdere 1 kg</p>
         <button onClick={() => setShowGuide(true)} style={{ padding: "8px 20px", background: "#F3F4F6", border: "1px solid #D1D5DB", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#374151" }}>📖 Guida utilizzo</button>
       </div>
 
-      {/* Form */}
       <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 20, marginBottom: 20 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "#6366F1", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>📋 Dati principali</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
           <div><label style={lStyle}>Peso (kg)</label><input style={iStyle} type="number" placeholder="es. 75" value={form.weight} onChange={e => setF("weight", e.target.value)} /></div>
           <div><label style={lStyle}>Altezza (cm)</label><input style={iStyle} type="number" placeholder="es. 175" value={form.height} onChange={e => setF("height", e.target.value)} /></div>
-          <div><label style={lStyle}>Età (anni)</label><input style={iStyle} type="number" placeholder="es. 30" value={form.age} onChange={e => setF("age", e.target.value)} /></div>
+          <div><label style={lStyle}>Eta (anni)</label><input style={iStyle} type="number" placeholder="es. 30" value={form.age} onChange={e => setF("age", e.target.value)} /></div>
           <div>
             <label style={lStyle}>Sesso biologico</label>
             <div style={{ display: "flex", gap: 8 }}>
               {["M","F"].map(s => (
-                <button key={s} onClick={() => setF("sex", s)} style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600, background: form.sex === s ? "#4F46E5" : "#F3F4F6", color: form.sex === s ? "#fff" : "#374151" }}>{s === "M" ? "♂ Uomo" : "♀ Donna"}</button>
+                <button key={s} onClick={() => setF("sex", s)} style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600, background: form.sex === s ? "#4F46E5" : "#F3F4F6", color: form.sex === s ? "#fff" : "#374151" }}>{s === "M" ? "Uomo" : "Donna"}</button>
               ))}
             </div>
           </div>
         </div>
         <div style={{ marginBottom: 20 }}>
-          <label style={lStyle}>Livello di attività fisica</label>
+          <label style={lStyle}>Livello di attivita fisica</label>
           <select style={{ ...iStyle, cursor: "pointer" }} value={form.activity} onChange={e => setF("activity", parseInt(e.target.value))}>
             {activityLevels.map((l, i) => <option key={i} value={i}>{l.label}</option>)}
           </select>
@@ -384,9 +451,9 @@ export default function App() {
           Misura con metro da sarto rilassato sulla pelle. Ripeti 2-3 volte e usa la media. Misura al mattino a digiuno.
         </div>
         <div style={{ display: "grid", gridTemplateColumns: form.sex === "F" ? "1fr 1fr 1fr" : "1fr 1fr", gap: 14, marginBottom: 18 }}>
-          <div><label style={lStyle}>Vita (cm)</label><input style={iStyle} type="number" placeholder={form.sex === "M" ? "All'ombelico" : "Punto più stretto"} value={form.waist} onChange={e => setF("waist", e.target.value)} /></div>
+          <div><label style={lStyle}>Vita (cm)</label><input style={iStyle} type="number" placeholder={form.sex === "M" ? "All'ombelico" : "Punto piu stretto"} value={form.waist} onChange={e => setF("waist", e.target.value)} /></div>
           <div><label style={lStyle}>Collo (cm)</label><input style={iStyle} type="number" placeholder="Sotto il pomo d'Adamo" value={form.neck} onChange={e => setF("neck", e.target.value)} /></div>
-          {form.sex === "F" && <div><label style={lStyle}>Fianchi (cm)</label><input style={iStyle} type="number" placeholder="Punto più largo" value={form.hips} onChange={e => setF("hips", e.target.value)} /></div>}
+          {form.sex === "F" && <div><label style={lStyle}>Fianchi (cm)</label><input style={iStyle} type="number" placeholder="Punto piu largo" value={form.hips} onChange={e => setF("hips", e.target.value)} /></div>}
         </div>
         <button onClick={calculate} style={{ width: "100%", padding: "13px 0", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>Calcola 🔥</button>
       </div>
@@ -396,10 +463,10 @@ export default function App() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
             <KpiCard label="BMR (riposo)" value={result.bmr + " kcal"} sub="metabolismo basale" color="#6366F1" />
             <KpiCard label="TDEE (totale)" value={result.tdee + " kcal"} sub="fabbisogno giornaliero" color="#0EA5E9" />
-            <KpiCard label="BMI" value={result.bmi} sub={getBMIInfo(parseFloat(result.bmi)).label} color={getBMIInfo(parseFloat(result.bmi)).color} note="⚠️ Solo dato matematico" />
+            <KpiCard label="BMI" value={result.bmi} sub={getBMIInfo(parseFloat(result.bmi)).label} color={getBMIInfo(parseFloat(result.bmi)).color} note="Solo dato matematico" />
           </div>
           <div style={{ background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#92400E", marginBottom: 14 }}>
-            <strong>⚠️ Il BMI è solo un indice matematico</strong>: non distingue massa grassa da massa muscolare.
+            <strong>Il BMI e solo un indice matematico</strong>: non distingue massa grassa da massa muscolare.
           </div>
 
           {result.bf && (
@@ -410,27 +477,25 @@ export default function App() {
                 <KpiCard label="Grasso (kg)" value={result.fatKg.toFixed(1) + " kg"} sub="massa adiposa" color={getBFCategory(result.sex, result.bf).color} />
                 <KpiCard label="Massa magra" value={result.leanKg.toFixed(1) + " kg"} sub="muscoli + ossa + organi" color="#059669" />
               </div>
-              <div style={{ marginBottom: 12 }}>
+              <div style={{ position: "relative", marginTop: 20, marginBottom: 8 }}>
                 <div style={{ fontSize: 12, color: "#6B7280", marginBottom: 6 }}>Range ACE per {result.sex === "M" ? "uomini" : "donne"}</div>
-                <div style={{ position: "relative", marginTop: 20 }}>
-                  <div style={{ display: "flex", borderRadius: 6, overflow: "hidden" }}>
-                    {(result.sex === "M"
-                      ? [{l:"Ess.",min:0,max:6,c:"#3B82F6"},{l:"Atleta",min:6,max:14,c:"#059669"},{l:"Fitness",min:14,max:18,c:"#10B981"},{l:"Media",min:18,max:25,c:"#D97706"},{l:"Obesità",min:25,max:40,c:"#DC2626"}]
-                      : [{l:"Ess.",min:0,max:14,c:"#3B82F6"},{l:"Atleta",min:14,max:21,c:"#059669"},{l:"Fitness",min:21,max:25,c:"#10B981"},{l:"Media",min:25,max:32,c:"#D97706"},{l:"Obesità",min:32,max:50,c:"#DC2626"}]
-                    ).map((seg, i) => {
-                      const total = result.sex === "M" ? 40 : 50;
-                      const pct = ((seg.max - seg.min) / total) * 100;
-                      const inRange = result.bf >= seg.min && result.bf < seg.max;
-                      return (
-                        <div key={i} style={{ width: pct + "%", height: 22, background: seg.c, opacity: inRange ? 1 : 0.25, position: "relative" }}>
-                          {inRange && <div style={{ position: "absolute", top: -18, left: "50%", transform: "translateX(-50%)", fontSize: 11, fontWeight: 800, color: seg.c, whiteSpace: "nowrap" }}>{result.bf.toFixed(1)}%</div>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 10, color: "#9CA3AF" }}>
-                    <span>Ess.</span><span>Atleta</span><span>Fitness</span><span>Media</span><span>Obesità</span>
-                  </div>
+                <div style={{ display: "flex", borderRadius: 6, overflow: "hidden" }}>
+                  {(result.sex === "M"
+                    ? [{min:0,max:6,c:"#3B82F6"},{min:6,max:14,c:"#059669"},{min:14,max:18,c:"#10B981"},{min:18,max:25,c:"#D97706"},{min:25,max:40,c:"#DC2626"}]
+                    : [{min:0,max:14,c:"#3B82F6"},{min:14,max:21,c:"#059669"},{min:21,max:25,c:"#10B981"},{min:25,max:32,c:"#D97706"},{min:32,max:50,c:"#DC2626"}]
+                  ).map((seg, i) => {
+                    const total = result.sex === "M" ? 40 : 50;
+                    const pct = ((seg.max - seg.min) / total) * 100;
+                    const inRange = result.bf >= seg.min && result.bf < seg.max;
+                    return (
+                      <div key={i} style={{ width: pct + "%", height: 22, background: seg.c, opacity: inRange ? 1 : 0.25, position: "relative" }}>
+                        {inRange && <div style={{ position: "absolute", top: -18, left: "50%", transform: "translateX(-50%)", fontSize: 11, fontWeight: 800, color: seg.c, whiteSpace: "nowrap" }}>{result.bf.toFixed(1)}%</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 10, color: "#9CA3AF" }}>
+                  <span>Ess.</span><span>Atleta</span><span>Fitness</span><span>Media</span><span>Obesita</span>
                 </div>
               </div>
             </div>
@@ -444,9 +509,9 @@ export default function App() {
             </div>
           )}
 
-          <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
             {tabs.map(t => (
-              <button key={t[0]} onClick={() => setTab(t[0])} style={{ flex: 1, padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12, background: tab === t[0] ? "#4F46E5" : "#F3F4F6", color: tab === t[0] ? "#fff" : "#374151" }}>{t[1]}</button>
+              <button key={t[0]} onClick={() => setTab(t[0])} style={{ flex: 1, minWidth: 80, padding: "10px 4px", borderRadius: 10, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 11, background: tab === t[0] ? "#4F46E5" : "#F3F4F6", color: tab === t[0] ? "#fff" : "#374151" }}>{t[1]}</button>
             ))}
           </div>
 
@@ -472,38 +537,51 @@ export default function App() {
 
           {tab === "running" && (
             <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
-              <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>Formula RunForFatLoss</h3>
+              <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🏃 Formula RunForFatLoss</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.8 x peso → <strong>{result.kcalPerKm} kcal/km</strong> per te</p>
               <BigBox color="#4F46E5" km={result.kmFor1kg} mode="run" />
               <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>📅 Come distribuire i km</h4>
-              <ActivityRows items={[
-                { periodo: "In 1 giorno", km: result.kmPerDay1, emoji: "🔥", color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
-                { periodo: "In 1 settimana", km: result.kmPerDay7, emoji: "💪", color: "#D97706", note: "Impegnativo ma fattibile" },
-                { periodo: "In 2 settimane", km: result.kmPerDay14, emoji: "🏃", color: "#059669", note: "Ritmo sostenibile e consigliato" },
-                { periodo: "In 4 settimane", km: result.kmPerDay28, emoji: "🎯", color: "#6366F1", note: "Ritmo ideale per principianti" },
-              ]} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  { periodo: "In 1 giorno", km: result.kmPerDay1, color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
+                  { periodo: "In 1 settimana", km: result.kmPerDay7, color: "#D97706", note: "Impegnativo ma fattibile" },
+                  { periodo: "In 2 settimane", km: result.kmPerDay14, color: "#059669", note: "Ritmo sostenibile e consigliato" },
+                  { periodo: "In 4 settimane", km: result.kmPerDay28, color: "#6366F1", note: "Ritmo ideale per principianti" },
+                ].map((r, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F9FAFB", borderRadius: 10, padding: "12px 14px", borderLeft: "4px solid " + r.color }}>
+                    <div>
+                      <div style={{ fontWeight: 700, color: r.color, fontSize: 14 }}>{r.periodo}</div>
+                      <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{r.note}</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontSize: 20, fontWeight: 800, color: "#111827" }}>{r.km} km</div>
+                      <div style={{ fontSize: 11, color: "#9CA3AF" }}>al giorno</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
           {tab === "walking" && (
             <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
-              <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>Formula Camminata</h3>
+              <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🚶 Formula Camminata</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.5 x peso → <strong>{result.kcalPerKmWalk} kcal/km</strong> per te</p>
               <BigBox color="#059669" km={result.kmFor1kgWalk} mode="walk" />
               <div style={{ background: "#F0FDF4", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#166534", marginBottom: 12 }}>
-                👣 <strong>Lunghezza media di un passo:</strong> ~75 cm (0.75 m) — varia tra 70 e 80 cm in base all'altezza e all'andatura. 1 km = ~1.333 passi.
+                👣 <strong>Lunghezza media di un passo:</strong> ~75 cm — 1 km = ~1.333 passi
               </div>
               <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>📅 Come distribuire i km</h4>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
                 {[
-                  { periodo: "In 1 giorno", km: result.kmPerDay1Walk, emoji: "🔥", color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
-                  { periodo: "In 1 settimana", km: result.kmPerDay7Walk, emoji: "💪", color: "#D97706", note: "Impegnativo ma fattibile" },
-                  { periodo: "In 2 settimane", km: result.kmPerDay14Walk, emoji: "🚶", color: "#059669", note: "Ritmo sostenibile e consigliato" },
-                  { periodo: "In 4 settimane", km: result.kmPerDay28Walk, emoji: "🎯", color: "#6366F1", note: "Ritmo ideale per principianti" },
+                  { periodo: "In 1 giorno", km: result.kmPerDay1Walk, color: "#DC2626", note: "Sconsigliato, sforzo estremo" },
+                  { periodo: "In 1 settimana", km: result.kmPerDay7Walk, color: "#D97706", note: "Impegnativo ma fattibile" },
+                  { periodo: "In 2 settimane", km: result.kmPerDay14Walk, color: "#059669", note: "Ritmo sostenibile e consigliato" },
+                  { periodo: "In 4 settimane", km: result.kmPerDay28Walk, color: "#6366F1", note: "Ritmo ideale per principianti" },
                 ].map((r, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F9FAFB", borderRadius: 10, padding: "12px 14px", borderLeft: "4px solid " + r.color }}>
                     <div>
-                      <div style={{ fontWeight: 700, color: r.color, fontSize: 14 }}>{r.emoji} {r.periodo}</div>
+                      <div style={{ fontWeight: 700, color: r.color, fontSize: 14 }}>{r.periodo}</div>
                       <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{r.note}</div>
                     </div>
                     <div style={{ textAlign: "right" }}>
@@ -529,6 +607,8 @@ export default function App() {
               </div>
             </div>
           )}
+
+          {tab === "attivita" && <AttivitaBlock weight={result.weight} />}
         </div>
       )}
     </div>
