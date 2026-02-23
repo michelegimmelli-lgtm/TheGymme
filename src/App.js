@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TIPS from "./tips";
+import { TIPS } from "./tips";
 
 const KG_TO_KCAL = 7700;
 
@@ -78,7 +78,7 @@ function TipCard({ categoria }) {
   return (
     <div style={{ background: bg[categoria], borderRadius: 12, padding: "14px 16px", marginBottom: 14, borderLeft: "4px solid " + col }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: col, textTransform: "uppercase", letterSpacing: 1 }}>Consiglio del giorno</span>
+        <span style={{ fontSize: 11, fontWeight: 700, color: col, textTransform: "uppercase", letterSpacing: 1 }}>💡 Consiglio del giorno</span>
         <span style={{ fontSize: 11, color: "#9CA3AF" }}>{idx + 1} / {tips.length}</span>
       </div>
       <div style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, marginBottom: 12 }}>
@@ -241,12 +241,13 @@ function SimulatoreBlock({ result }) {
 function AttivitaBlock({ weight }) {
   const [selectedId, setSelectedId] = useState(ACTIVITIES[0].id);
   const [minuti, setMinuti] = useState(30);
+
   const act = ACTIVITIES.find(a => a.id === selectedId);
   const ore = minuti / 60;
   const kcalBruciate = act.met * weight * ore;
   const sessioniPer1kg = KG_TO_KCAL / kcalBruciate;
   const kcalCamminata = 0.5 * weight * ore;
-  const kcalCorsa = 0.8 * weight * ore;
+  const kcalCorsa = 0.8 * weight * (minuti / 60);
 
   return (
     <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
@@ -275,7 +276,9 @@ function AttivitaBlock({ weight }) {
         <div style={{ fontSize: 12, color: "#D97706", fontWeight: 700, marginBottom: 4, textTransform: "uppercase" }}>
           {act.emoji} {act.nome} — {minuti} minuti
         </div>
-        <div style={{ fontSize: 44, fontWeight: 900, color: "#DC2626", lineHeight: 1 }}>{Math.round(kcalBruciate)}</div>
+        <div style={{ fontSize: 44, fontWeight: 900, color: "#DC2626", lineHeight: 1 }}>
+          {Math.round(kcalBruciate)}
+        </div>
         <div style={{ fontSize: 14, color: "#D97706", marginTop: 4, fontWeight: 600 }}>kcal bruciate</div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
@@ -356,37 +359,30 @@ export default function App() {
 
   const guideData = [
     { bg: "#EEF2FF", col: "#4F46E5", title: "1. Come inserire i dati", items: [
-      ["Peso (kg)", "Inserisci il tuo peso corporeo attuale, es. 95.5. Usa il punto come separatore decimale."],
+      ["Peso (kg)", "Inserisci il tuo peso corporeo attuale, es. 95.5."],
       ["Altezza (cm)", "Inserisci la tua altezza in centimetri, es. 178."],
       ["Eta", "Inserisci la tua eta in anni interi."],
       ["Sesso biologico", "Seleziona Uomo o Donna. Influisce sulla formula del BMR e sui range di massa grassa."],
       ["Livello di attivita", "Scegli il livello che descrive meglio la tua settimana tipo."],
     ]},
-    { bg: "#FEF2F2", col: "#DC2626", title: "2. Come misurare vita, collo e fianchi", intro: "Usa un metro da sarto sulla pelle, non sopra i vestiti. Misura al mattino a digiuno e ripeti 2-3 volte usando la media.", items: [
+    { bg: "#FEF2F2", col: "#DC2626", title: "2. Come misurare vita, collo e fianchi", intro: "Usa un metro da sarto sulla pelle, non sopra i vestiti. Misura al mattino a digiuno.", items: [
       ["Vita (uomo)", "All'altezza dell'ombelico, in posizione rilassata."],
       ["Vita (donna)", "Nel punto piu stretto del busto, sopra l'ombelico."],
       ["Collo", "Appena sotto il pomo d'Adamo, metro orizzontale."],
       ["Fianchi (solo donne)", "Nel punto piu largo dei fianchi/glutei."],
     ]},
     { bg: "#F0FDF4", col: "#059669", title: "3. Come leggere i risultati", items: [
-      ["BMR", "Calorie bruciate a riposo assoluto. E la base di partenza."],
-      ["TDEE", "Fabbisogno calorico reale giornaliero. Mangiare meno crea un deficit."],
+      ["BMR", "Calorie bruciate a riposo assoluto."],
+      ["TDEE", "Fabbisogno calorico reale giornaliero."],
       ["BMI", "Indice matematico orientativo: non distingue muscolo da grasso."],
       ["% Massa grassa", "Calcolata con metodo US Navy. Margine di errore +/-3-4%."],
-      ["Massa magra", "Muscoli, ossa, organi, acqua. E la costante usata nel simulatore."],
+      ["Massa magra", "Muscoli, ossa, organi, acqua."],
       ["Deficit calorico", "Quante kcal in meno rispetto al TDEE per perdere peso."],
     ]},
-    { bg: "#EEF2FF", col: "#4F46E5", title: "4. Come usare il Simulatore Dimagrimento", intro: "Visibile solo dopo aver calcolato la composizione corporea (servono vita e collo).", items: [
+    { bg: "#EEF2FF", col: "#4F46E5", title: "4. Come usare il Simulatore Dimagrimento", items: [
       ["Inserisci il % grasso obiettivo", "Digita la percentuale target o usa i tasti rapidi."],
       ["Premi Simula", "Calcola il peso di arrivo mantenendo costante la massa magra."],
-      ["Leggi i risultati", "Peso obiettivo, kg da perdere, settimane stimate, km di corsa/camminata."],
       ["Formula usata", "Peso obiettivo = Massa magra / (1 - % grasso target / 100)."],
-    ]},
-    { bg: "#FFF7ED", col: "#D97706", title: "5. Come usare Altre Attivita", intro: "Disponibile dopo aver calcolato i risultati. Calcola il dispendio calorico per attivita diverse dalla camminata e corsa.", items: [
-      ["Seleziona attivita", "Scegli dal menu a tendina l'attivita che vuoi calcolare."],
-      ["Inserisci la durata", "Indica i minuti di allenamento previsti."],
-      ["MET", "Valore scientifico che misura l'intensita di un'attivita rispetto al riposo. Piu alto = piu kcal bruciate."],
-      ["Sessioni per 1 kg", "Quante volte devi fare quella attivita per bruciare 1 kg di grasso."],
     ]},
   ];
 
@@ -427,9 +423,6 @@ export default function App() {
             </p>
             <p style={{ margin: "0 0 20px", fontSize: 14, color: "#374151", lineHeight: 1.7 }}>
               I risultati possono variare in base a fattori individuali. <strong>Utilizza questi dati come spunto di riflessione</strong>, non come valori assoluti.
-            </p>
-            <p style={{ margin: "0 0 20px", fontSize: 13, color: "#6B7280", lineHeight: 1.6, background: "#F9FAFB", borderRadius: 10, padding: "10px 14px" }}>
-              Per un piano personalizzato rivolgiti sempre a un medico, dietologo o professionista del fitness qualificato.
             </p>
             <button onClick={() => setShowDisclaimer(false)} style={{ width: "100%", padding: "13px 0", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>✅ Ho Capito</button>
           </div>
@@ -559,10 +552,10 @@ export default function App() {
 
           {tab === "running" && (
             <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
-              <TipCard categoria="corsa" />
               <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🏃 Formula RunForFatLoss</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.8 x peso → <strong>{result.kcalPerKm} kcal/km</strong> per te</p>
               <BigBox color="#4F46E5" km={result.kmFor1kg} mode="run" />
+              <TipCard categoria="corsa" />
               <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>📅 Come distribuire i km</h4>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {[
@@ -588,10 +581,10 @@ export default function App() {
 
           {tab === "walking" && (
             <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
-              <TipCard categoria="camminata" />
               <h3 style={{ margin: "0 0 4px", fontSize: 15 }}>🚶 Formula Camminata</h3>
               <p style={{ margin: "0 0 14px", fontSize: 13, color: "#6B7280" }}>Kcal bruciate/km = 0.5 x peso → <strong>{result.kcalPerKmWalk} kcal/km</strong> per te</p>
               <BigBox color="#059669" km={result.kmFor1kgWalk} mode="walk" />
+              <TipCard categoria="camminata" />
               <div style={{ background: "#F0FDF4", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#166534", marginBottom: 12 }}>
                 👣 <strong>Lunghezza media di un passo:</strong> ~75 cm — 1 km = ~1.333 passi
               </div>
