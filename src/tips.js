@@ -23,4 +23,9 @@ export const TIPS = [
   { id: 22, categoria: "attivita",  emoji: "🥚", testo: "Assicurati di assumere il giusto quantitativo proteico giornaliero: se il tuo obiettivo e costruire massa muscolare, e necessario anche un surplus calorico. Senza questi due elementi l'allenamento da solo non basta." },
   { id: 23, categoria: "attivita",  emoji: "🤸", testo: "Il riscaldamento non e opzionale: 5-10 minuti di mobilita riducono il rischio di infortuni del 50%." },
   { id: 24, categoria: "attivita",  emoji: "🏠", testo: "Anche 20 minuti a casa con esercizi a corpo libero sono efficaci: la costanza batte sempre l'intensita occasionale." },
+  { id: 25, categoria: "corsa", emoji: "📊", testo: "Non correre sempre alla stessa velocità: inserisci una seduta settimanale con variazioni di ritmo (interval training) per migliorare VO2max e capacità metabolica." },
+  { id: 27, categoria: "camminata", emoji: "📈", testo: "Imposta un target settimanale di passi invece che giornaliero: ti permette di essere flessibile senza perdere costanza nel lungo periodo." },
+  { id: 28, categoria: "camminata", emoji: "🌳", testo: "Cammina in ambienti naturali quando possibile: riduce il cortisolo, migliora l'umore e rende piu sostenibile l'abitudine nel tempo." },
+  { id: 29, categoria: "attivita", emoji: "⚖️", testo: "Progressione prima dell'intensità: aumenta prima volume o tecnica e solo dopo il carico. La forza si costruisce, non si improvvisa." },
+  { id: 30, categoria: "attivita", emoji: "🧠", testo: "Allenati con intenzione: concentrati sul muscolo che lavora e sulla tecnica. La qualità dell'esecuzione conta piu del peso sollevato." }
 ];
