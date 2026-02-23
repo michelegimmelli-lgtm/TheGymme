@@ -246,8 +246,6 @@ function AttivitaBlock({ weight }) {
   const ore = minuti / 60;
   const kcalBruciate = act.met * weight * ore;
   const sessioniPer1kg = KG_TO_KCAL / kcalBruciate;
-  const kcalCamminata = 0.5 * weight * ore;
-  const kcalCorsa = 0.8 * weight * (minuti / 60);
 
   return (
     <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 18, marginBottom: 14 }}>
@@ -285,29 +283,7 @@ function AttivitaBlock({ weight }) {
         <KpiCard label="Sessioni per 1 kg" value={sessioniPer1kg.toFixed(1)} sub={"sessioni da " + minuti + " min"} color="#DC2626" />
         <KpiCard label="Giorni consecutivi" value={Math.ceil(sessioniPer1kg).toFixed(0)} sub="per bruciare 1 kg" color="#D97706" />
       </div>
-      <h4 style={{ margin: "0 0 10px", fontSize: 14 }}>⚖️ Confronto con {minuti} minuti di attivita</h4>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {[
-          { label: act.emoji + " " + act.nome, kcal: Math.round(kcalBruciate), color: "#DC2626", highlight: true },
-          { label: "🏃 Corsa", kcal: Math.round(kcalCorsa), color: "#4F46E5", highlight: false },
-          { label: "🚶 Camminata", kcal: Math.round(kcalCamminata), color: "#059669", highlight: false },
-        ].map((c, i) => {
-          const maxKcal = Math.max(kcalBruciate, kcalCorsa, kcalCamminata);
-          const pct = (c.kcal / maxKcal) * 100;
-          return (
-            <div key={i} style={{ background: c.highlight ? "#FEF2F2" : "#F9FAFB", borderRadius: 10, padding: "10px 14px", borderLeft: "4px solid " + c.color }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                <span style={{ fontWeight: 700, color: c.color, fontSize: 14 }}>{c.label}</span>
-                <span style={{ fontWeight: 800, color: "#111827", fontSize: 16 }}>{c.kcal} kcal</span>
-              </div>
-              <div style={{ background: "#E5E7EB", borderRadius: 4, height: 6 }}>
-                <div style={{ width: pct + "%", background: c.color, borderRadius: 4, height: 6 }} />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#78350F", marginTop: 14 }}>
+      <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#78350F" }}>
         I valori MET sono basati sul Compendium of Physical Activities. Il dispendio reale varia in base a intensita, forma fisica e metabolismo individuale.
       </div>
     </div>
