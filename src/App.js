@@ -1,7 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TIPS } from "./tips";
 
 const KG_TO_KCAL = 7700;
+const STORAGE_KEY = "thegymme:app-state:v1";
+const STORAGE_VERSION = 1;
+const TABS = ["calorie", "running", "walking", "attivita"];
+const DEFAULT_FORM = { weight: "", height: "", age: "", sex: "M", activity: 0, waist: "", neck: "", hips: "" };
+
+function loadStoredState() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || parsed.version !== STORAGE_VERSION) return null;
+
+    const safeForm = parsed.form && typeof parsed.form === "object"
+      ? { ...DEFAULT_FORM, ...parsed.form }
+      : DEFAULT_FORM;
+    const safeTab = TABS.includes(parsed.tab) ? parsed.tab : "calorie";
+    const safeResult = parsed.result && typeof parsed.result === "object" ? parsed.result : null;
+    const safeShowDisclaimer = typeof parsed.showDisclaimer === "boolean" ? parsed.showDisclaimer : true;
+
+    return { form: safeForm, tab: safeTab, result: safeResult, showDisclaimer: safeShowDisclaimer };
+  } catch {
+    return null;
+  }
+}
 
 const activityLevels = [
   { label: "Sedentario (poco o nessun esercizio)", factor: 1.2 },
@@ -291,12 +316,27 @@ function AttivitaBlock({ weight }) {
 }
 
 export default function App() {
-  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [persisted] = useState(() => loadStoredState());
+  const [showDisclaimer, setShowDisclaimer] = useState(() => persisted?.showDisclaimer ?? true);
   const [showGuide, setShowGuide] = useState(false);
-  const [form, setForm] = useState({ weight: "", height: "", age: "", sex: "M", activity: 0, waist: "", neck: "", hips: "" });
-  const [result, setResult] = useState(null);
-  const [tab, setTab] = useState("calorie");
+  const [form, setForm] = useState(() => persisted?.form ?? DEFAULT_FORM);
+  const [result, setResult] = useState(() => persisted?.result ?? null);
+  const [tab, setTab] = useState(() => persisted?.tab ?? "calorie");
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        version: STORAGE_VERSION,
+        showDisclaimer,
+        form,
+        result,
+        tab,
+      }));
+    } catch {
+      // Ignore storage errors (private mode, quota exceeded, blocked storage).
+    }
+  }, [showDisclaimer, form, result, tab]);
 
   const calculate = () => {
     const w = parseFloat(form.weight), h = parseFloat(form.height), a = parseInt(form.age);
