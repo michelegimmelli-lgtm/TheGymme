@@ -178,21 +178,13 @@
             });
 
             if (!response.ok) {
-              let errorMessage = "Invio non riuscito.";
-              try {
-                const data = await response.json();
-                if (data && (data.detail || data.error)) {
-                  errorMessage = String(data.detail || data.error);
-                }
-              } catch (parseError) {
-              }
-              throw new Error(errorMessage);
+              throw new Error("request_failed");
             }
 
             form.reset();
             statusEl.textContent = "Messaggio inviato con successo.";
           } catch (error) {
-            statusEl.textContent = "Invio non riuscito: " + String(error?.message || "Riprova tra poco.");
+            statusEl.textContent = "Invio non riuscito. Riprova tra poco.";
           } finally {
             submitButton.disabled = false;
           }
