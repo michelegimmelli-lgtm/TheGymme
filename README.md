@@ -37,16 +37,3 @@ npm start
 
 📄 Licenza
 MIT — libero utilizzo con attribuzione.
-
-## Form contatti (Vercel)
-
-Per usare il form in `public/index.html` con endpoint serverless:
-
-1. Deploy su Vercel
-2. Imposta queste Environment Variables nel progetto:
-   - `RESEND_API_KEY`
-   - `CONTACT_TO_EMAIL` (la tua email di destinazione)
-   - `CONTACT_FROM_EMAIL` (mittente verificato su Resend, es. `TheGymme <noreply@tuodominio.com>`)
-3. Redeploy
-
-L'endpoint e `POST /api/contact`.
