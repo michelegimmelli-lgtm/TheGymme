@@ -1,7 +1,5 @@
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX = 5;
-const DEFAULT_TO_EMAIL = "thegymme83@gmail.com";
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
 
 const requestStore = new Map();
 
@@ -110,14 +108,8 @@ module.exports = async function handler(req, res) {
     return json(res, 400, { error: "Invalid message" });
   }
 
-  const to =
-    process.env.CONTACT_TO_EMAIL ||
-    process.env.CONTACT_TO_MAIL ||
-    DEFAULT_TO_EMAIL;
-  const from =
-    process.env.CONTACT_FROM_EMAIL ||
-    process.env.CONTACT_FROM_MAIL ||
-    DEFAULT_FROM_EMAIL;
+  const to = process.env.CONTACT_TO_EMAIL || process.env.CONTACT_TO_MAIL;
+  const from = process.env.CONTACT_FROM_EMAIL || process.env.CONTACT_FROM_MAIL;
   if (!to || !from) {
     return json(res, 500, {
       error: "Missing CONTACT_TO_EMAIL or CONTACT_FROM_EMAIL env vars",
