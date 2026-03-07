@@ -108,11 +108,16 @@ module.exports = async function handler(req, res) {
     return json(res, 400, { error: "Invalid message" });
   }
 
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL;
+  const to = process.env.CONTACT_TO_EMAIL || process.env.CONTACT_TO_MAIL;
+  const from = process.env.CONTACT_FROM_EMAIL || process.env.CONTACT_FROM_MAIL;
   if (!to || !from) {
     return json(res, 500, {
       error: "Missing CONTACT_TO_EMAIL or CONTACT_FROM_EMAIL env vars",
+      detail:
+        `env_debug to_email=${Boolean(process.env.CONTACT_TO_EMAIL)} ` +
+        `to_mail=${Boolean(process.env.CONTACT_TO_MAIL)} ` +
+        `from_email=${Boolean(process.env.CONTACT_FROM_EMAIL)} ` +
+        `from_mail=${Boolean(process.env.CONTACT_FROM_MAIL)}`,
     });
   }
 
