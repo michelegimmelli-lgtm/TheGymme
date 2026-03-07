@@ -7,6 +7,21 @@ function json(res, status, payload) {
   res.status(status).json(payload);
 }
 
+function parseBody(req) {
+  if (!req.body) return {};
+  if (typeof req.body === "string") {
+    try {
+      return JSON.parse(req.body);
+    } catch {
+      return {};
+    }
+  }
+  if (typeof req.body === "object") {
+    return req.body;
+  }
+  return {};
+}
+
 function getClientIp(req) {
   const forwarded = req.headers["x-forwarded-for"];
   if (typeof forwarded === "string" && forwarded.length > 0) {
@@ -73,7 +88,7 @@ module.exports = async function handler(req, res) {
     return json(res, 429, { error: "Too many requests. Retry later." });
   }
 
-  const body = req.body || {};
+  const body = parseBody(req);
   const name = String(body.name || "").trim();
   const email = String(body.email || "").trim();
   const message = String(body.message || "").trim();
@@ -117,6 +132,9 @@ module.exports = async function handler(req, res) {
     return json(res, 200, { ok: true });
   } catch (error) {
     console.error("Contact API error:", error);
-    return json(res, 500, { error: "Failed to send message" });
+    return json(res, 500, {
+      error: "Failed to send message",
+      detail: String(error?.message || "unknown_error"),
+    });
   }
 };
