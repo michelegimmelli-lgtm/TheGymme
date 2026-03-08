@@ -348,8 +348,7 @@ export default function App() {
       `- BMR: ${result.bmr} kcal`,
       `- TDEE: ${result.tdee} kcal`,
       `- BMI: ${result.bmi}`,
-      `- Corsa per 1kg di grasso: ${result.kmFor1kg} km`,
-      `- Camminata per 1kg di grasso: ${result.kmFor1kgWalk} km`,
+      `- Deficit consigliato: -500 kcal/die (target: ${Math.round(result.tdee - 500)} kcal/die)`,
     ];
     if (result.bf) {
       lines.push(`- Massa grassa: ${result.bf.toFixed(1)}%`);
