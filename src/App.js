@@ -341,7 +341,7 @@ export default function App() {
   const buildDirectMessage = () => {
     if (!result) return "Ciao! Ho usato TheGymme e vorrei una consulenza personalizzata.";
     const lines = [
-      "Ciao! Ho usato TheGymme e vorrei una consulenza personalizzata.",
+      "Ciao! Ho usato TheGymme Calculator e vorrei una consulenza personalizzata.",
       "",
       "Ecco i miei dati principali calcolati:",
       `- Peso: ${result.weight} kg`,
