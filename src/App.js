@@ -24,9 +24,7 @@ function loadStoredState() {
       : DEFAULT_FORM;
     const safeTab = TABS.includes(parsed.tab) ? parsed.tab : "calorie";
     const safeResult = parsed.result && typeof parsed.result === "object" ? parsed.result : null;
-    const safeShowDisclaimer = typeof parsed.showDisclaimer === "boolean" ? parsed.showDisclaimer : true;
-
-    return { form: safeForm, tab: safeTab, result: safeResult, showDisclaimer: safeShowDisclaimer };
+    return { form: safeForm, tab: safeTab, result: safeResult };
   } catch {
     return null;
   }
@@ -321,7 +319,7 @@ function AttivitaBlock({ weight }) {
 
 export default function App() {
   const [persisted] = useState(() => loadStoredState());
-  const [showDisclaimer, setShowDisclaimer] = useState(() => persisted?.showDisclaimer ?? true);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [showGuide, setShowGuide] = useState(false);
   const [form, setForm] = useState(() => persisted?.form ?? DEFAULT_FORM);
   const [result, setResult] = useState(() => persisted?.result ?? null);
@@ -332,7 +330,6 @@ export default function App() {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
         version: STORAGE_VERSION,
-        showDisclaimer,
         form,
         result,
         tab,
@@ -340,7 +337,7 @@ export default function App() {
     } catch {
       // Ignore storage errors (private mode, quota exceeded, blocked storage).
     }
-  }, [showDisclaimer, form, result, tab]);
+  }, [form, result, tab]);
 
   const copyDirectMessage = async () => {
     try {
@@ -475,7 +472,10 @@ export default function App() {
         </div>
         <h2 style={{ margin: "4px 0 6px", fontSize: 22 }}>Calcolatore Calorie &amp; Dispendio Energetico</h2>
         <p style={{ color: "#6B7280", fontSize: 13, margin: "0 0 12px" }}>Fabbisogno calorico, deficit, massa grassa, corsa e camminata per perdere 1 kg</p>
-        <button onClick={() => setShowGuide(true)} style={{ padding: "8px 20px", background: "#F3F4F6", border: "1px solid #D1D5DB", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#374151" }}>📖 Guida utilizzo</button>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+          <button onClick={() => setShowGuide(true)} style={{ padding: "8px 20px", background: "#F3F4F6", border: "1px solid #D1D5DB", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#374151" }}>📖 Guida utilizzo</button>
+          <button onClick={() => setShowDisclaimer(true)} style={{ padding: "8px 20px", background: "#EEF2FF", border: "1px solid #C7D2FE", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#3730A3" }}>⚠️ Riapri disclaimer</button>
+        </div>
       </div>
 
       <div style={{ background: "#fff", borderRadius: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 20, marginBottom: 20 }}>
