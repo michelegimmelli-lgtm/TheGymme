@@ -376,6 +376,7 @@ export default function App() {
       window.alert("Non riesco ad aprire il Direct automaticamente. Aprilo da qui: " + INSTAGRAM_DIRECT_URL);
     }
   };
+  const directMessagePreview = buildDirectMessage();
 
   const calculate = () => {
     const w = parseFloat(form.weight), h = parseFloat(form.height), a = parseInt(form.age);
@@ -547,6 +548,14 @@ export default function App() {
             </div>
             <div style={{ fontSize: 12, color: "#374151", marginBottom: 10, lineHeight: 1.6 }}>
               Preparo un messaggio Direct con i tuoi risultati principali (BMR, TDEE, BMI, km e massa grassa se disponibile).
+            </div>
+            <div style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#4338CA", textTransform: "uppercase", marginBottom: 6 }}>
+                Anteprima messaggio
+              </div>
+              <div style={{ background: "#fff", border: "1px solid #D1D5DB", borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#111827", whiteSpace: "pre-wrap", lineHeight: 1.5 }}>
+                {directMessagePreview}
+              </div>
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ padding: "8px 12px", background: "#fff", color: "#4F46E5", border: "1px solid #C7D2FE", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
