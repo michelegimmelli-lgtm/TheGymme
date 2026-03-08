@@ -480,6 +480,9 @@ export default function App() {
             <p style={{ margin: "0 0 20px", fontSize: 14, color: "#374151", lineHeight: 1.7 }}>
               I risultati possono variare in base a fattori individuali. <strong>Utilizza questi dati come spunto di riflessione</strong>, non come valori assoluti.
             </p>
+            <p style={{ margin: "0 0 20px", fontSize: 13, color: "#4B5563", lineHeight: 1.6, background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 8, padding: "10px 12px" }}>
+              I dati inseriti restano disponibili al prossimo reload della pagina per comodita, ma <strong>non vengono salvati o divulgati in alcun modo all'esterno</strong>.
+            </p>
             <button onClick={() => setShowDisclaimer(false)} style={{ width: "100%", padding: "13px 0", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>✅ Ho Capito</button>
           </div>
         </div>
