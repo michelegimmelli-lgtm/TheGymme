@@ -4,6 +4,10 @@ import { TIPS } from "./tips";
 const KG_TO_KCAL = 7700;
 const STORAGE_KEY = "thegymme:app-state:v1";
 const STORAGE_VERSION = 1;
+const INSTAGRAM_USERNAME = "tuo_username";
+const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_USERNAME}/`;
+const INSTAGRAM_DIRECT_URL = `https://ig.me/m/${INSTAGRAM_USERNAME}`;
+const DIRECT_MESSAGE_TEMPLATE = "Ciao! Ho usato TheGymme e vorrei una consulenza personalizzata.";
 const TABS = ["calorie", "running", "walking", "attivita"];
 const DEFAULT_FORM = { weight: "", height: "", age: "", sex: "M", activity: 0, waist: "", neck: "", hips: "" };
 
@@ -338,6 +342,15 @@ export default function App() {
     }
   }, [showDisclaimer, form, result, tab]);
 
+  const copyDirectMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(DIRECT_MESSAGE_TEMPLATE);
+      window.alert("Messaggio copiato. Ora puoi incollarlo nel Direct su Instagram.");
+    } catch {
+      window.alert("Copia non riuscita. Copia manualmente questo testo:\n\n" + DIRECT_MESSAGE_TEMPLATE);
+    }
+  };
+
   const calculate = () => {
     const w = parseFloat(form.weight), h = parseFloat(form.height), a = parseInt(form.age);
     if (!w || !h || !a || w <= 0 || h <= 0 || a <= 0) return;
@@ -440,6 +453,17 @@ export default function App() {
             <p style={{ margin: "0 0 20px", fontSize: 14, color: "#374151", lineHeight: 1.7 }}>
               I risultati possono variare in base a fattori individuali. <strong>Utilizza questi dati come spunto di riflessione</strong>, non come valori assoluti.
             </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "#4F46E5", textDecoration: "none", fontWeight: 700, textAlign: "center", background: "#EEF2FF", borderRadius: 8, padding: "9px 10px" }}>
+                Vai al mio Instagram
+              </a>
+              <button onClick={copyDirectMessage} style={{ width: "100%", padding: "10px 0", background: "#F3F4F6", color: "#111827", border: "1px solid #D1D5DB", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                Copia messaggio pronto per Direct
+              </button>
+              <a href={INSTAGRAM_DIRECT_URL} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "#065F46", textDecoration: "none", fontWeight: 700, textAlign: "center", background: "#ECFDF5", borderRadius: 8, padding: "9px 10px" }}>
+                Apri Direct Instagram
+              </a>
+            </div>
             <button onClick={() => setShowDisclaimer(false)} style={{ width: "100%", padding: "13px 0", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>✅ Ho Capito</button>
           </div>
         </div>
