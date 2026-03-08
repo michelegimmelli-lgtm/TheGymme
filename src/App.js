@@ -4,10 +4,9 @@ import { TIPS } from "./tips";
 const KG_TO_KCAL = 7700;
 const STORAGE_KEY = "thegymme:app-state:v1";
 const STORAGE_VERSION = 1;
-const INSTAGRAM_USERNAME = "tuo_username";
+const INSTAGRAM_USERNAME = "thegymme_coach";
 const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_USERNAME}/`;
 const INSTAGRAM_DIRECT_URL = `https://ig.me/m/${INSTAGRAM_USERNAME}`;
-const DIRECT_MESSAGE_TEMPLATE = "Ciao! Ho usato TheGymme e vorrei una consulenza personalizzata.";
 const TABS = ["calorie", "running", "walking", "attivita"];
 const DEFAULT_FORM = { weight: "", height: "", age: "", sex: "M", activity: 0, waist: "", neck: "", hips: "" };
 
@@ -339,12 +338,42 @@ export default function App() {
     }
   }, [form, result, tab]);
 
+  const buildDirectMessage = () => {
+    if (!result) return "Ciao! Ho usato TheGymme e vorrei una consulenza personalizzata.";
+    const lines = [
+      "Ciao! Ho usato TheGymme e vorrei una consulenza personalizzata.",
+      "",
+      "Ecco i miei dati principali calcolati:",
+      `- Peso: ${result.weight} kg`,
+      `- BMR: ${result.bmr} kcal`,
+      `- TDEE: ${result.tdee} kcal`,
+      `- BMI: ${result.bmi}`,
+      `- Corsa per 1kg di grasso: ${result.kmFor1kg} km`,
+      `- Camminata per 1kg di grasso: ${result.kmFor1kgWalk} km`,
+    ];
+    if (result.bf) {
+      lines.push(`- Massa grassa: ${result.bf.toFixed(1)}%`);
+    }
+    lines.push("", "Vorrei capire come impostare alimentazione e allenamento.");
+    return lines.join("\n");
+  };
+
   const copyDirectMessage = async () => {
+    const message = buildDirectMessage();
     try {
-      await navigator.clipboard.writeText(DIRECT_MESSAGE_TEMPLATE);
+      await navigator.clipboard.writeText(message);
       window.alert("Messaggio copiato. Ora puoi incollarlo nel Direct su Instagram.");
     } catch {
-      window.alert("Copia non riuscita. Copia manualmente questo testo:\n\n" + DIRECT_MESSAGE_TEMPLATE);
+      window.alert("Copia non riuscita. Copia manualmente questo testo:\n\n" + message);
+    }
+  };
+
+  const openInstagramDirectWithMessage = async () => {
+    await copyDirectMessage();
+    try {
+      window.open(INSTAGRAM_DIRECT_URL, "_blank", "noopener,noreferrer");
+    } catch {
+      window.alert("Non riesco ad aprire il Direct automaticamente. Aprilo da qui: " + INSTAGRAM_DIRECT_URL);
     }
   };
 
@@ -450,17 +479,6 @@ export default function App() {
             <p style={{ margin: "0 0 20px", fontSize: 14, color: "#374151", lineHeight: 1.7 }}>
               I risultati possono variare in base a fattori individuali. <strong>Utilizza questi dati come spunto di riflessione</strong>, non come valori assoluti.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
-              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "#4F46E5", textDecoration: "none", fontWeight: 700, textAlign: "center", background: "#EEF2FF", borderRadius: 8, padding: "9px 10px" }}>
-                Vai al mio Instagram
-              </a>
-              <button onClick={copyDirectMessage} style={{ width: "100%", padding: "10px 0", background: "#F3F4F6", color: "#111827", border: "1px solid #D1D5DB", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                Copia messaggio pronto per Direct
-              </button>
-              <a href={INSTAGRAM_DIRECT_URL} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "#065F46", textDecoration: "none", fontWeight: 700, textAlign: "center", background: "#ECFDF5", borderRadius: 8, padding: "9px 10px" }}>
-                Apri Direct Instagram
-              </a>
-            </div>
             <button onClick={() => setShowDisclaimer(false)} style={{ width: "100%", padding: "13px 0", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>✅ Ho Capito</button>
           </div>
         </div>
@@ -522,6 +540,22 @@ export default function App() {
           </div>
           <div style={{ background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#92400E", marginBottom: 14 }}>
             <strong>Il BMI e solo un indice matematico</strong>: non distingue massa grassa da massa muscolare.
+          </div>
+          <div style={{ background: "linear-gradient(135deg, #EEF2FF, #ECFDF5)", borderRadius: 12, padding: "14px 14px", marginBottom: 14, border: "1px solid #C7D2FE" }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#312E81", marginBottom: 6 }}>
+              Contattami su Instagram
+            </div>
+            <div style={{ fontSize: 12, color: "#374151", marginBottom: 10, lineHeight: 1.6 }}>
+              Preparo un messaggio Direct con i tuoi risultati principali (BMR, TDEE, BMI, km e massa grassa se disponibile).
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ padding: "8px 12px", background: "#fff", color: "#4F46E5", border: "1px solid #C7D2FE", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
+                Profilo @thegymme_coach
+              </a>
+              <button onClick={openInstagramDirectWithMessage} style={{ padding: "8px 12px", background: "#4F46E5", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                Copia messaggio + Apri Direct
+              </button>
+            </div>
           </div>
 
           {result.bf && (
